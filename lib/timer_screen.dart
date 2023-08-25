@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'dart:math';
+import 'package:http/http.dart' as http;
 
 class TimerScreen extends StatefulWidget {
   final IO.Socket socket;
@@ -38,6 +40,33 @@ class _TimerScreenState extends State<TimerScreen>
         curve: Curves.easeInOut,
       ),
     );
+    widget.socket.on('test-completed', (data) {
+      // Показываем уведомление
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Уведомление"),
+              content: Text("Тест завершен"),
+              actions: [
+                TextButton(
+                    onPressed: onContinuePressed,
+                    child: Text('Продолжить работу')),
+                TextButton(
+                    onPressed: onFinishPressed,
+                    child: Text('Завершить работу')),
+              ],
+            );
+          });
+    });
+  }
+
+  Future<void> onContinuePressed() async {
+    Navigator.pop(context);
+  }
+
+  void onFinishPressed() {
+    Navigator.pop(context);
   }
 
   void startCountdown() {
