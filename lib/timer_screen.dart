@@ -61,13 +61,15 @@ class _TimerScreenState extends State<TimerScreen>
     });
   }
 
+  Future<void> sendCommand(String command) async {
+    await http.post('http://localhost:3000/command' as Uri,
+        body: {'command': command});
+  }
+
   Future<void> onContinuePressed() async {
     Navigator.pop(context);
 
-    Future<void> sendCommand(String command) async {
-      await http.post('http://localhost:3000/command' as Uri,
-          body: {'command': command});
-    }
+    await sendCommand('minimize_wpf');
   }
 
   void onFinishPressed() {
